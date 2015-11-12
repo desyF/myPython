@@ -1,0 +1,102 @@
+# url: http://www.codeskulptor.org/#user40_cqQReiCDwCajjQ9.py
+# template for "Guess the number" mini-project
+# input will come from buttons and an input field
+# all output for the game will be printed in the console
+# by DV
+
+import random
+import simplegui
+import math
+
+#global variables
+canvas_width  = 200
+canvas_height = 200
+canvas_color  = "grey"
+random_number = 0
+remain_guesses = 0
+low = 0
+high = 100
+
+#initialize
+def initialize():
+    new_game(0,100)
+
+# helper function to start and restart the game
+def new_game(low1, high1):
+    # initialize global variables used in your code here
+
+    global random_number, remain_guesses, low, high
+    
+    low = low1
+    high = high1
+    
+    random_number = random.randrange(low, high)
+    remain_guesses = math.ceil(math.log(high - low,2))
+    #if high == 1000:
+    #    remain_guesses = 10
+    #else:       
+    #    remain_guesses = 7
+    
+    print ""
+    print "New game. Range is from", low, "to", high
+    print "Number of remaining guesses is", int(remain_guesses)
+
+    
+# define event handlers for control panel
+def range100():
+    # button that changes the range to [0,100) and starts a new game 
+    new_game(0,100)
+
+def range1000():
+    # button that changes the range to [0,1000) and starts a new game     
+    new_game(0,1000)
+        
+def input_guess(guess):
+    # main game logic goes here
+    
+    global random_number, remain_guesses
+    
+    remain_guesses -= 1
+    guess = int(guess)
+    
+    print ""
+    print "Guess was", guess
+    print "Number of remaining guesses is", int(remain_guesses)
+    
+    if (remain_guesses > 0):
+        if (guess > random_number):
+            print "Lower!" 
+        elif (guess < random_number):
+            print "Higher!"
+        else:
+            print "Correct!"
+            new_game(low,high)
+    else:
+        if guess == random_number:
+            print "Correct!"
+            new_game(low,high)
+        else:
+            print "You ran out of guesses! The correct number was", random_number
+            new_game(low,high)
+
+def draw_handler(canvas):
+    canvas.draw_text("Guess the number!", [30, 50], 17, 'White', 'serif')
+    frame.set_canvas_background(canvas_color)
+    
+# create frame
+frame = simplegui.create_frame("Guess the number!", canvas_width, canvas_height)
+
+# register event handlers for control elements and start frame
+frame.add_button("Range is [0,100]", range100, 200)
+frame.add_button("Range is [0,1000]", range1000, 200)
+frame.add_input("Enter a guess", input_guess, 200)
+
+frame.set_draw_handler(draw_handler)
+frame.start()
+
+# call new_game 
+#new_game()
+initialize()
+
+
+# always remember to check your completed program against the grading rubric
