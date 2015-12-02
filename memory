@@ -1,0 +1,112 @@
+# implementation of card game - Memory -- week 5
+
+import simplegui
+import random
+
+move = 0
+card_list = []
+exposed_diction = {}
+
+# helper function to initialize globals
+def new_game():
+    global card_list
+    global move
+    global exposed_diction
+    
+    card_list = []
+    move = 0
+    
+    label.set_text("Moves = "+str(move))
+    
+    list_1 = [1,2,3,4,5,6,7,8]
+    list_2 = [1,2,3,4,5,6,7,8]
+
+    card_list.extend(list_1)
+    card_list.extend(list_2)
+
+    random.shuffle(card_list)
+    
+    # card status
+    i = 0
+    for num in card_list:
+        exposed_diction[i] = "false"
+        i += 1
+     
+# define event handlers
+def mouseclick(pos):
+    # add game state logic here
+    global exposed_list
+    global move
+    
+    count = 0
+    
+    for key, value in exposed_diction.items():
+        if (value == "true"):
+            count += 1
+            if (count == 1):
+                index_1 = key
+                pick_1 =  card_list[key]
+            elif (count == 2):               
+                index_2 = key
+                pick_2 =  card_list[key]
+                if (pick_1 == pick_2):
+                    exposed_diction[index_1] = "matched"
+                    exposed_diction[index_2] = "matched"
+                else:
+                    exposed_diction[index_1] = "false"
+                    exposed_diction[index_2] = "false"
+ 
+    # calculate card in the deck                
+    x = pos[0]
+    card_num = x // 50
+    
+    if (exposed_diction[card_num] == "false"):
+        exposed_diction[card_num] = "true" 
+  
+    if (exposed_diction.values().count("true") == 2):
+        move += 1
+        label.set_text("Moves = " + str(move))   
+                        
+# cards are logically 50x100 pixels in size    
+def draw(canvas):
+    
+    # initialze starting point for the 1st card 
+    point_1 = [0,0]
+    point_2 = [50,0]
+    point_3 = [50,100]
+    point_4 = [0,100]
+    point_5 = [0,0]
+   
+    for num in card_list:
+        # draw card
+        canvas.draw_polyline([point_1, point_2, point_3,point_4,point_5], 2, "Green")
+         
+        point_1[0] =  point_2[0]
+        point_4[0] =  point_2[0]
+        point_5[0] =  point_2[0]
+        point_2[0] +=  50
+        point_3[0] +=  50     
+
+    text_pos = [4,72]
+    i = 0
+
+    for num in card_list:
+        if (exposed_diction.get(i) == "true" or exposed_diction.get(i) == "matched"):
+            text_pos[0] =  i*50
+            canvas.draw_text(str(num), text_pos, 76, "White", "monospace")
+        i += 1
+
+# create frame and add a button and labels
+frame = simplegui.create_frame("Memory", 800, 100)
+frame.add_button("Reset", new_game, 100)
+label = frame.add_label("Turns = 0")
+
+# register event handlers
+frame.set_mouseclick_handler(mouseclick)
+frame.set_draw_handler(draw)
+
+# get things rolling
+new_game()
+frame.start()
+
+# Always remember to review the grading rubric
