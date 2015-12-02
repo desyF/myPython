@@ -94,7 +94,7 @@ def draw(canvas):
     for num in card_list:
         if (exposed_diction.get(i) == "true" or exposed_diction.get(i) == "matched"):
             text_pos[0] =  i*50
-            canvas.draw_text(str(num), text_pos, 76, "White", "monospace")
+            canvas.draw_text(str(num), text_pos, 76, "White", "serif")
         i += 1
 
 # create frame and add a button and labels
