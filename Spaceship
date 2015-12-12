@@ -1,4 +1,4 @@
-#url: http://www.codeskulptor.org/#user40_ZqjVHSrb19G084g.py
+#url: http://www.codeskulptor.org/#user40_f0JWmpHNmoJozvC.py
 # Week 7 - Spaceship
 # program template for Spaceship
 # by DV
@@ -185,7 +185,7 @@ def draw(canvas):
     # update ship and sprites
     my_ship.update()
     a_rock.update()
-    a_missile.update
+    a_missile.update()
   
     canvas.draw_text("Lives", (50, 50), 26, "White", 'serif')
     canvas.draw_text(str(lives), (50, 75), 26, "White", 'serif') 
